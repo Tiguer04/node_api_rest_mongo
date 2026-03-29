@@ -14,10 +14,10 @@ const getBook = async(req, res, next) =>{
   }
 
   try{
-    book = await Book.findById(id);
+    book = await Book.findById(id); // Busca una coincidencia entre el id y el _id Del objeto
 
     if(!book){
-      return res.status(404).json({message: 'El libro no fue encontrado'})
+      return res.status(404).json({message: 'El libro no fue encontrado.'})
     }
 
   } catch(error){
@@ -33,8 +33,7 @@ const getBook = async(req, res, next) =>{
 
 router.get('/', async(req, res) =>{
   try{
-    const books = await Book.find();
-    console.log('GET ALL ', books)
+    const books = await Book.find(); // Devuelve todos los libros de la DB
     if(books.length === 0){
       return res.status(204).json([])
     }
@@ -65,7 +64,7 @@ router.post('/', async (req, res) =>{
   )
 
   try{
-    const newBook = await book.save();
+    const newBook = await book.save(); // Guarda el book del POST en Mongo, y luego se almacena en newBook.
     console.log(newBook);
     res.status(201).json(newBook);
 
@@ -119,7 +118,8 @@ if(!req.body.title && !req.body.author && !req.body.gener && !req.body.publicati
 router.delete('/:id', getBook, async(req, res) =>{
   try {
     const book = res.book;
-    await book.deleteOne({
+    await book.deleteOne({ // Elimina el libro que contenga dicho _id
+                                          // El _id lo provee automáticamente MongoDB.
       _id: book._id
     });
     res.json({message:`El libro ${book.title} fue eliminado exitosamente!`})

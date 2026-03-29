@@ -11,9 +11,13 @@ const bookRoutes = require('./routes/book.routes')
 const app = express()
 app.use(bodyParser.json()); // Parseador de bodies
 
+
 //Acá conectaremos la BD
 mongoose.connect(process.env.MONGO_URL,{dbName: process.env.MONGO_DB_NAME})
 const db = mongoose.connection;
+
+db.on('error', (error) => console.error('Error de conexión:', error));
+db.once('open', () => console.log('Conectado a MongoDB correctamente'));
 
 app.use('/books', bookRoutes);
 
